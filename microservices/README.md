@@ -1,5 +1,12 @@
 ### ECommerce MicroServices ###
 
+### Microservices ###
+* orders-service
+    - expose endpoints for placing orders
+* inventory-service
+    - expose endpoints for querying the product catalog
+* DynamoDB backend
+
 
 
 ### Switch to Java 11 if currently set to java 8 ###

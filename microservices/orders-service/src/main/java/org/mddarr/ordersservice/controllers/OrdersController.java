@@ -18,10 +18,6 @@ public class OrdersController {
 
     private final OrdersService ordersService;
 
-    @GetMapping("/hello")
-    public String hello(@RequestParam(name="name", defaultValue = "World") String name){
-        return String.format("Hello, %s", name);
-    }
     @GetMapping
     public List<Order> allOrders() {
         return ordersService.getAll();
