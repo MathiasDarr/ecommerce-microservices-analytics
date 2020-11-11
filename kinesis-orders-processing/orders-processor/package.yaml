@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'orders-processor
+
+  Sample SAM Template for orders-processor
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+Resources:
+  JobsDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Jobs
+      AttributeDefinitions:
+      - AttributeName: jobId
+        AttributeType: S
+      - AttributeName: name
+        AttributeType: S
+      KeySchema:
+      - AttributeName: jobId
+        KeyType: HASH
+      - AttributeName: name
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

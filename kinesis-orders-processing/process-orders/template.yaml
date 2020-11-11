@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: process-orders
+
+Resources:
+  JobsDynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: Jobs
+      AttributeDefinitions:
+        -
+          AttributeName: jobId
+          AttributeType: S
+        -
+          AttributeName: name
+          AttributeType: S
+      KeySchema:
+        -
+          AttributeName: jobId
+          KeyType: HASH
+        -
+          AttributeName: name
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+#  WriteCapacityScalableTarget:
+#    Type: AWS::ApplicationAutoScaling::ScalableTarget
+#    Properties:
+#      MaxCapacity: 15
+#      MinCapacity: 5
+#      ResourceId: !Join
+#        - /
+#        - - table
+#          - !Ref DDBTable
+#      RoleARN: !GetAtt ScalingRole.Arn
+#      ScalableDimension: dynamodb:table:WriteCapacityUnits
+#      ServiceNamespace: dynamodb
+
+
+
+#  OrdersStream:
+#    Name: OrdersStream
+#    Type: AWS::Kinesis::Stream
+#    Properties:
+#      Name: OrdersStream
+#      ShardCount: 1
+#
+#  ProcessOrdersFunction:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      CodeUri: process-orders/
+#      Handler: app.lambda_handler
+#      Runtime: python3.7
+#      Events:
+#        OrdersStream:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /hello
+#            Method: get
+#
