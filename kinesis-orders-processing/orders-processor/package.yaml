@@ -9,19 +9,25 @@ Globals:
   Function:
     Timeout: 3
 Resources:
-  JobsDynamoDBTable:
+  OrdersStream:
+    Name: OrdersStream
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: OrdersStream
+      ShardCount: 1
+  OrdersDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: Jobs
       AttributeDefinitions:
-      - AttributeName: jobId
+      - AttributeName: CustomerID
         AttributeType: S
-      - AttributeName: name
+      - AttributeName: OrderID
         AttributeType: S
       KeySchema:
-      - AttributeName: jobId
+      - AttributeName: CustomerID
         KeyType: HASH
-      - AttributeName: name
+      - AttributeName: OrderID
         KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1

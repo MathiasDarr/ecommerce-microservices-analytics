@@ -2,7 +2,6 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   orders-processor
-
   Sample SAM Template for orders-processor
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
@@ -11,20 +10,41 @@ Globals:
     Timeout: 3
 
 Resources:
-  JobsDynamoDBTable:
+  OrdersStream:
+    Name: OrdersStream
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: OrdersStream
+      ShardCount: 1
+
+  OrdersDBTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
       TableName: Jobs
       AttributeDefinitions:
-        - AttributeName: jobId
+        - AttributeName: CustomerID
           AttributeType: S
-        - AttributeName: name
+        - AttributeName: OrderID
           AttributeType: S
       KeySchema:
-        - AttributeName: jobId
+        - AttributeName: CustomerID
           KeyType: HASH
-        - AttributeName: name
+        - AttributeName: OrderID
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+
+#  OrdersProcessingFunction:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      CodeUri: process-orders-lambda/
+#      Handler: app.lambda_handler
+#      Runtime: python3.7
+#      Events:
+#        HelloWorld:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /hello
+#            Method: get
+#
