@@ -38,7 +38,7 @@ public class ProductService {
     }
 
     private static Product map(ProductRepository.ProductEntity entity) {
-        return new Product(entity.getBrandID(), entity.getProductName(), entity.getPrice(), entity.getImageURL());
+        return new Product(entity.getVendor(), entity.getProductName(), entity.getPrice(), entity.getCategory());
     }
 
 }

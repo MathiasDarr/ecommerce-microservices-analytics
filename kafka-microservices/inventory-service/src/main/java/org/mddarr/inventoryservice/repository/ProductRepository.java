@@ -88,8 +88,8 @@ public class ProductRepository {
     @NoArgsConstructor
     public static class ProductEntity {
 
-        @DynamoDBHashKey(attributeName="brandID")
-        private String brandID;
+        @DynamoDBHashKey(attributeName="vendor")
+        private String vendor;
         @DynamoDBRangeKey(attributeName = "productName")
         private String productName;
 
@@ -98,9 +98,16 @@ public class ProductRepository {
 
         @DynamoDBAttribute(attributeName="price")
         private Double price;
+//
+//        @DynamoDBAttribute(attributeName="colors")
+//        private List<String> colors;
 
-        @DynamoDBAttribute(attributeName="imageURL")
-        private String imageURL;
+        @DynamoDBAttribute(attributeName="category")
+        private String category;
+
+
+//        @DynamoDBAttribute(attributeName="imageURL")
+//        private String imageURL;
 
     }
 }

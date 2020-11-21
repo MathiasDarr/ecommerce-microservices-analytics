@@ -19,6 +19,7 @@
 		<java.version>11</java.version>
 	</properties>
 	<modules>
+		<module> dakobed-schema</module>
 		<module>orders-service</module>
 		<module>inventory-service</module>
 		<module>service-utilities</module>

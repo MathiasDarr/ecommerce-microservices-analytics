@@ -7,102 +7,38 @@ Globals:
   Function:
     Timeout: 3
 Resources:
-  S3Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicRead
-      BucketName: cf-test-bucket-1
-      NotificationConfiguration:
-        LambdaConfigurations:
-        - Event: s3:ObjectCreated:*
-          Function: aws:arn:lambda:test:testfunc
-        QueueConfigurations:
-        - Event: s3:ObjectDeleted:*
-          Queue: aws:arn:sqs:test:testqueue
-          Filter:
-            S3Key:
-              S3KeyFilter:
-                Rules:
-                - Name: name1
-                  Value: value1
-                - Name: name2
-                  Value: value2
-      Tags:
-      - Key: foobar
-        Value:
-          Ref: SQSQueue
-  SQSQueue:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: cf-test-queue-1
-      Tags:
-      - Key: key1
-        Value: value1
-      - Key: key2
-        Value: value2
-  SNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      TopicName:
-        Fn::Join:
-        - ''
-        - - Ref: AWS::StackName
-          - -test-topic-1-1
-      Tags:
-      - Key: foo
-        Value:
-          Ref: S3Bucket
-      - Key: bar
-        Value:
-          Fn::GetAtt:
-          - S3Bucket
-          - Arn
-  TopicSubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      Protocol: sqs
-      TopicArn:
-        Ref: SNSTopic
-      Endpoint:
-        Fn::GetAtt:
-        - SQSQueue
-        - QueueArn
-      FilterPolicy:
-        eventType:
-        - created
-  KinesisStream:
+  OrdersStream:
     Type: AWS::Kinesis::Stream
     Properties:
-      Name: cf-test-stream-1
-  SQSQueueNoNameProperty:
-    Type: AWS::SQS::Queue
-  TestParam:
-    Type: AWS::SSM::Parameter
+      Name: OrdersStream
+      ShardCount: 1
+  OrdersDBTable:
+    Type: AWS::DynamoDB::Table
     Properties:
-      Name: cf-test-param-1
-      Description: test param 1
-      Type: String
-      Value: value123
-      Tags:
-        tag1: value1
-  ApiGatewayRestApi:
-    Type: AWS::ApiGateway::RestApi
+      TableName: Jobs
+      AttributeDefinitions:
+      - AttributeName: CustomerID
+        AttributeType: S
+      - AttributeName: OrderID
+        AttributeType: S
+      KeySchema:
+      - AttributeName: CustomerID
+        KeyType: HASH
+      - AttributeName: OrderID
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  OrdersProcessingFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      Name: test-api
-  GatewayResponseUnauthorized:
-    Type: AWS::ApiGateway::GatewayResponse
-    Properties:
-      RestApiId:
-        Ref: ApiGatewayRestApi
-      ResponseType: UNAUTHORIZED
-      ResponseTemplates:
-        application/json: '{"errors":[{"message":"Custom text!", "extra":"Some extra
-          info"}]}'
-  GatewayResponseDefault500:
-    Type: AWS::ApiGateway::GatewayResponse
-    Properties:
-      RestApiId:
-        Ref: ApiGatewayRestApi
-      ResponseType: DEFAULT_5XX
-      ResponseTemplates:
-        application/json: '{"errors":[{"message":$context.error.messageString}]}'
+      FunctionName: OrdersProcessingFunction
+      CodeUri: s3://dakobed-serverless-apis/34ece264da1b662ab6432ff5885acdfc
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get

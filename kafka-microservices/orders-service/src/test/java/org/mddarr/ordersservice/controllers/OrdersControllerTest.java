@@ -41,39 +41,39 @@ class OrdersControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Test
-    void hello() throws Exception {
-        RequestBuilder request = get("/orders/hello");
-        MvcResult result = mockMvc.perform(request).andReturn();
-        Assert.assertEquals("Hello, World", result.getResponse().getContentAsString());
-    }
-
-    @Test
-    void testHelloWithName() throws Exception{
-        mockMvc.perform(get("/orders/hello?name=Dan"))
-            .andExpect(content().string("Hello, Dan"));
-    }
-
-    @Test
-    void testGetOrderByIdAndCreationDate() throws Exception {
-//        mockMvc.perform(get("/orders/20171129-29970/20150135"))
-        mockMvc.perform(get("/orders"))
-                .andExpect(status().isOk());
-//                .andExpect(jsonPath("orderID").value("20171129-29970"));
-    }
-
-    @Test
-    void testGetOrdersByCustomer() throws Exception {
-        mockMvc.perform(get("/orders/customerOrders/jerry@gmail.com"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void testDeleteOrderByIdAndCreationDate() throws Exception {
-        mockMvc.perform(delete("http://localhost:8080/orders/20171129-29970/20150135"))
-            .andExpect(status().is(202));
-    }
-
+//    @Test
+//    void hello() throws Exception {
+//        RequestBuilder request = get("/orders/hello");
+//        MvcResult result = mockMvc.perform(request).andReturn();
+//        Assert.assertEquals("Hello, World", result.getResponse().getContentAsString());
+//    }
+//
+//    @Test
+//    void testHelloWithName() throws Exception{
+//        mockMvc.perform(get("/orders/hello?name=Dan"))
+//            .andExpect(content().string("Hello, Dan"));
+//    }
+//
+//    @Test
+//    void testGetOrderByIdAndCreationDate() throws Exception {
+////        mockMvc.perform(get("/orders/20171129-29970/20150135"))
+//        mockMvc.perform(get("/orders"))
+//                .andExpect(status().isOk());
+////                .andExpect(jsonPath("orderID").value("20171129-29970"));
+//    }
+//
+//    @Test
+//    void testGetOrdersByCustomer() throws Exception {
+//        mockMvc.perform(get("/orders/customerOrders/jerry@gmail.com"))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    void testDeleteOrderByIdAndCreationDate() throws Exception {
+//        mockMvc.perform(delete("http://localhost:8080/orders/20171129-29970/20150135"))
+//            .andExpect(status().is(202));
+//    }
+//
 
 
 

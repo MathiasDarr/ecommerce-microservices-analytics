@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUCKET="dakobed-serverless-apis"
+awslocal s3 mb s3://dakobed-serverless-apis
 
 if [[ -z $2 ]]
 then
@@ -10,9 +10,8 @@ fi
 
 sam package \
   --template-file template.yaml \
-  --s3-bucket $BUCKET \
+  --s3-bucket "dakobed-serverless-apis" \
   --output-template-file package.yaml
-sam package --template-file template.yaml --s3-bucket "dakobed-serverless-apis"  --output-template-file package.yaml
 
 
 if [[ $1 == 'aws' ]]
@@ -28,11 +27,9 @@ elif [[ $1 == 'local' ]]
 then
     aws cloudformation --endpoint-url=http://localhost:4566 deploy  \
       --template-file package.yaml \
-      --stack-name lambda-stack\
+      --stack-name stack1\
       --capabilities CAPABILITY_IAM
 
-
-    aws cloudformation --endpoint-url=http://localhost:4566 deploy  --template-file package.yaml --stack-name lambda-stack  --capabilities CAPABILITY_IAM
 
 else
     echo "choose either local or aws"
